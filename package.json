@@ -1,0 +1,11 @@
+{
+  "name": "stateful-sc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:afcharliekong/stateful-sc.git",
+  "author": "Charlie Kong <charlie@undercurrent.tech>",
+  "license": "MIT",
+  "dependencies": {
+    "@algo-builder/algob": "^3.2.0"
+  }
+}
