@@ -11,7 +11,7 @@ Creates a new monster with a specified amount of health (e.g. 5 to 50). The mons
 Reduces the monster's health by a random amount (0 to 5) if the monster's health is not 0. Contract will keep track of the player that does the most damage to that monster, as well as the maximum damage dealt. The player's local state should also keep track of the damage dealt to that monster.
 
 ### Reward player
-Send 1 Algos to the player that does the most damage if the monster is dead. Clear the monster afterwards. This function can only be accessed by the creator.
+Send 1 Algos to the player that does the most damage if the monster is dead. This function can only be accessed by the creator.
 
 ## Contract deployment
 Complete the code in `scripts/deploy_game.js` to deploy contract and fund it with 20 Algos.
