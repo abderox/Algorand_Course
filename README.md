@@ -8,7 +8,7 @@ Complete the code in `assets\game_approval.py`. The smart contract should contai
 Creates a new monster with a specified amount of health (e.g. 5 to 50). The monster's health must be greater than 5. Also initialize the global state of the maximum damage dealt to 0. You should also prevent the player from making multiple opt in transactions.
 
 ### Attack monster
-Reduces the monster's health by a random amount (0 to 5) if the monster's health is not 0. Contract will keep track of the player that does the most damage to that monster, as well as the maximum damage dealt. The player's local state should also keep track of the damage dealt to that monster.
+Reduces the monster's health by 2 points if the monster's health is not 0. Contract will keep track of the player that does the most damage to that monster, as well as the damage dealt by that player. The player's local state should also keep track of the damage dealt to that monster.
 
 ### Reward player
 Send 1 Algos to the player that does the most damage if the monster is dead. This function can only be accessed by the creator.
@@ -48,7 +48,7 @@ yarn run algob run scripts/actions/reward.js
 ```
 
 ## Hints
-1. The recipient of an inner transaction must be in the accounts array. This means that you will need to get the best player's address from the global state, process it (because it returns as base64 format) and pass it into the accounts array when rewarding the player.
+1. The recipient of an inner transaction must be in the accounts array. This means that you will need to get the best player's address from the global state, convert it to the address string (because it returns as base64 format) and pass it into the accounts array when rewarding the player.
 
 ## Setup instructions
 

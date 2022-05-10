@@ -1,6 +1,7 @@
 from pyteal import *
 
 def game():
+    # Write your code here
     handle_creation = Return(Int(1))
     handle_optin = Return (Int(1))
     handle_noop = Return(Int(1))
