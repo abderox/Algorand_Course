@@ -5,7 +5,7 @@ In this assignment, you will be tasked to complete stateful smart contract for a
 Complete the code in `assets\game_approval.py`. The smart contract should contain the following functions,
 
 ### Initialization
-Creates a new monster with a specified amount of health (e.g. 5 to 50). Also initialize the global state of the highest damage dealt to 0. 
+Creates a new monster with a specified amount of 5 health points and above. Also initialize the global state of the highest damage dealt to 0. 
 
 ### Opt In
 Initialize the local state of the damage done to the monster to 0. You should also prevent the player from making multiple opt in transactions.
