@@ -1,5 +1,5 @@
 # Stateful smart contract assignment
-In this assignment, you will be tasked to complete stateful smart contract for a game. When the contract is deployed, a monster with a fixed amount of health is created. Participating accounts can attack the monster for with a random amount damage. The account that does the most damage gets rewarded with Algos. 
+In this assignment, you will be tasked to complete stateful smart contract for a game. When the contract is deployed, a monster with a fixed amount of health is created. Participating accounts can attack the monster. The account that does the most damage gets rewarded with Algos. 
 
 ## Stateful contract
 Complete the code in `assets\game_approval.py`. The smart contract should contain the following functions,
