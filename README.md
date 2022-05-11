@@ -5,13 +5,16 @@ In this assignment, you will be tasked to complete stateful smart contract for a
 Complete the code in `assets\game_approval.py`. The smart contract should contain the following functions,
 
 ### Initialization
-Creates a new monster with a specified amount of health (e.g. 5 to 50). Also initialize the global state of the maximum damage dealt to 0. You should also prevent the player from making multiple opt in transactions.
+Creates a new monster with a specified amount of health (e.g. 5 to 50). Also initialize the global state of the highest damage dealt to 0. 
+
+### Opt In
+Initialize the local state of the damage done to the monster to 0. You should also prevent the player from making multiple opt in transactions.
 
 ### Attack monster
-Reduces the monster's health by 2 points if the monster's health is not 0. Contract will keep track of the player that does the most damage to that monster, as well as the damage dealt by that player. The player's local state should also keep track of the damage dealt to that monster.
+Reduces the monster's health by 2 points if the monster's health is not 0. The player's local state should also keep track of the damage dealt to that monster. The contract will use the local state value to determine if this player did the most damage to the monster.
 
 ### Reward player
-Send 1 Algos to the player that does the most damage if the monster is dead. This function can only be accessed by the creator.
+Send 1 Algos to the player that does the most damage if the monster is dead. This call can only be accessed by the creator.
 
 ## Contract deployment
 Complete the code in `scripts/deploy_game.js` to deploy contract and fund it with 20 Algos.
