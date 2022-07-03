@@ -10,6 +10,12 @@ const algodClient = new algosdk.Algodv2(process.env.ALGOD_TOKEN,
 );
 
 
+// // ? account status
+// (async () => {
+//     log_algoclient_response(await algodClient.status().do())
+// })().catch(console.error);
+
+// ? account info
 (async () => {
-    log_algoclient_response(await algodClient.status().do())
+    log_algoclient_response(await algodClient.accountInformation(process.env.ADDR_CREATOR).do())
 })().catch(console.error);
