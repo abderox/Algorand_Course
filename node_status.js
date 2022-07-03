@@ -10,12 +10,15 @@ const algodClient = new algosdk.Algodv2(process.env.ALGOD_TOKEN,
 );
 
 
-// // ? account status
-// (async () => {
-//     log_algoclient_response(await algodClient.status().do())
-// })().catch(console.error);
+// ? account status
+(async () => {
+    log_algoclient_response(await algodClient.status().do())
+})().catch(console.error);
 
 // ? account info
 (async () => {
-    log_algoclient_response(await algodClient.accountInformation(process.env.ADDR_CREATOR).do())
+    let accountInfo = await algodClient.accountInformation(process.env.ADDR_CREATOR).do();
+    // ? Check your balance
+    log_algoclient_response("Account balance: %d microAlgos", accountInfo.amount);
 })().catch(console.error);
+
