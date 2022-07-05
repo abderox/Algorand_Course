@@ -33,7 +33,7 @@ const getWalletMnemonic = async (walletHandle, walletPass) => {
 const generateKey = async (walletHandle) => {
     console.log("############### creating account")
 
-    const account = (await KmdClient.generateKey(walletHandle).address)
+    const account = (await KmdClient.generateKey(walletHandle)).address
     console.log("🚀 ~ file: account_kmd_create.js ~ line 25 ~ generateKey ~ account", account)
 
 }
