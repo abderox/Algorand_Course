@@ -16,9 +16,9 @@
 
 ``` Wallet exporting ```
 - > To export the mnemonic of a specific wallet , I should only know 3 things , which are : 
-- `account address`
-- `wallet password`  
-- `wallet name `  
+- 1. account address
+- 2. wallet password  
+- 3. wallet name   
 
 ``` Wallet import ```
 - > something 
