@@ -21,4 +21,4 @@
 - 3. wallet name   
 
 ``` Wallet import ```
-- > something 
+- > import account to an existing wallet  
