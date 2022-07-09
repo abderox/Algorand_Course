@@ -29,9 +29,9 @@ const provideAlgos = async (sender, receiver, amount) => {
   
     let tx = await algodClient.sendRawTransaction(signedTxn).do();
 
-    let confirmedTxn = await waitForConfirmation(algodClient, tx.txId, 4);
+    let confirmedTxn = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
     //Get the completed Transaction
-    console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+    console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
     let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
     console.log("Transaction information: %o", mytxinfo);
   };
@@ -42,7 +42,7 @@ const provideAlgos = async (sender, receiver, amount) => {
         let acc_B = await genStAcc.generateStandaloneAccount()
         let acc_A = await genStAcc.generateStandaloneAccount()
         
-        provider = algosdk.mnemonicToSecretKey(process.env.MNEMONIC_CREATOR);
+        provider = algosdk.mnemonicToSecretKey(process.env.KMD_MNEMONIC_WALLET);
         console.log("🚀 ~ file: rekey.js ~ line 46 ~ provider", provider)
 
         await provideAlgos(provider,acc_C,1e6)
@@ -69,44 +69,50 @@ const provideAlgos = async (sender, receiver, amount) => {
         // let signedTxn_ = txn.signTxn(myAccount.sk);
         // await algodClient.sendRawTransaction(signedTxn_).do();
 
-    
-        let txn = algosdk.makePaymentTxnWithSuggestedParams({
+        
+        let suggestedParams = await algodClient.getTransactionParams().do();
+        let txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
             from: acc_A.addr,
             to: acc_B.addr,
             amount: 0,
+            suggestedParams: suggestedParams,
             rekeyTo: multisigAddr
-        });
+          });
 
         let signedTxn = txn.signTxn(acc_A.sk);
         let txId = txn.txID().toString();
         console.log("Signed transaction with txID: %s", txId);
         let tx = await algodClient.sendRawTransaction(signedTxn).do();
 
-        let confirmedTxn = await waitForConfirmation(algodClient, tx.txId, 4);
+        let confirmedTxn = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
         //Get the completed Transaction
-        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
+        console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
         let mytxinfo = JSON.stringify(confirmedTxn.txn.txn, undefined, 2);
         console.log("Transaction information: %o", mytxinfo);
         
         console.log("Sending Algos from A to B...");
 
-        let param_ = await algodClient.getTransactionParams().do();
+        
         let payTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
           from: acc_A.addr,
           to: acc_B.addr,
           amount: 1e5, // 0.1 Algos
-          suggestedParams: param_,
+          suggestedParams: suggestedParams,
         });
-        let rawSignedTxn = algosdk.signMultisigTransaction(payTxn, param_, acc_C.sk).blob;
-        await algodclient.sendRawTransaction(rawSignedTxn).do();
+        let rawSignedTxn = algosdk.signMultisigTransaction(payTxn, params, acc_C.sk).blob;
+        console.log("🚀 ~ file: rekey.js ~ line 103 ~ rawSignedTxn", rawSignedTxn)
+        
+        let tx_= await algodClient.sendRawTransaction(rawSignedTxn).do();
+        console.log("🚀 ~ file: rekey.js ~ line 106 ~ tx_", tx_)
 
-        let confirmedTxn_ = await waitForConfirmation(algodClient, txId, 4);
+        let confirmedTxn_ = await algosdk.waitForConfirmation(algodClient, tx_.txId, 4);
         //Get the completed Transaction
-        console.log("Transaction " + txId + " confirmed in round " + confirmedTxn_["confirmed-round"]);
+        console.log("Transaction " + tx_.txId + " confirmed in round " + confirmedTxn_["confirmed-round"]);
         let mytxinfo_ = JSON.stringify(confirmedTxn_.txn.txn, undefined, 2);
         console.log("Transaction information: %o", mytxinfo_);
       
-      
+        console.log("Account A balance: ", (await algodClient.accountInformation(acc_A.addr).do()).amount);
+        console.log("Account B balance: ", (await algodClient.accountInformation(acc_B.addr).do()).amount);
 
     })().catch(console.error)
 
