@@ -3,7 +3,7 @@
         <h3>Select wallet</h3>
         <div class="d-grid gap-2 mb-5">
             <button @click="connectMyAlgo" class="btn btn-primary">MyAlgo</button>
-            <button @click="connectToAlgoSigner('Localhost')" class="btn btn-primary">AlgoSigner (Localhost)</button>
+            <button @click="connectToAlgoSigner('localhost')" class="btn btn-primary">AlgoSigner (Localhost)</button>
             <button @click="connectToAlgoSigner('TestNet')" class="btn btn-primary">AlgoSigner (TestNet)</button>
             <button @click="connectToWalletConnect" class="btn btn-primary mr-3">WalletConnect</button>
         </div>
@@ -61,29 +61,95 @@ export default {
                 console.error(err);
             }
 
-            // write your code here
 
-            // update these values upon successful connection
         },
         async connectToAlgoSigner(network) {
             this.network = network;
 
-            // write your code here
+            if (typeof AlgoSigner !== undefined) {
 
-            // update these values upon successful connection
-            this.sender = "54TK55AE76UIWFWF2SRTTIWUA5DHQCNLDSXDLNWHS5UMDREVMV2UHDZQKY";
-            this.receiver = "FW5MVGLGJZXJ42NZJVEWH654MJMTQAXMLLG2QYM55ENU4IO5YRRVX5V7DE";
+                AlgoSigner.connect()
+
+                    .then(() => AlgoSigner.accounts({
+                        ledger: network
+                    }))
+                    .then((accountData) => {
+
+                        console.log(accountData[0].address);
+                        this.sender = accountData[0].address;
+
+                        if (network == "localhost") {
+                            this.sender = accountData[1].address;
+                            this.receiver = accountData[0].address;
+
+                        }
+                        else {
+                            this.sender = accountData[0].address;
+                            this.receiver = "RQIZ5I7ERCA44ZX4Q7SIP4HDTUC6O244KCHJSABII2P4236JZHTPCUAMYM";
+                        }
+                    })
+                    .catch((e) => {
+
+                        console.error(e);
+                    })
+            }
+
+
             this.connection = "algosigner";
         },
         async connectToWalletConnect() {
             this.network = "TestNet";
 
-            // write your code here
 
-            // update these values upon successful connection
-            // this.sender = "";
-            // this.receiver = "";
-            // this.connection = "algosigner";
+            this.connector = new WalletConnect({
+                bridge: "https://bridge.walletconnect.org", // Required
+                qrcodeModal: QRCodeModal,
+            });
+
+            // Check if connection is already established
+            if (this.connector.connected) {
+                // kill  session
+                await this.connector.killSession();
+            }
+            this.connector.createSession();
+
+
+            // Subscribe to connection events
+            this.connector.on("connect", (error, payload) => {
+                if (error) {
+                    throw error;
+                }
+
+                // Get provided accounts and chainId
+                const { accounts, chainId } = payload.params[0];
+                console.log(accounts, chainId);
+                this.connection = "WalletConnect";
+                this.sender = accounts[0];
+                this.receiver = "RQIZ5I7ERCA44ZX4Q7SIP4HDTUC6O244KCHJSABII2P4236JZHTPCUAMYM";
+            });
+
+            this.connector.on("session_update", (error, payload) => {
+                if (error) {
+                    throw error;
+                }
+
+                // Get updated accounts and chainId
+                const { accounts, chainId } = payload.params[0];
+                console.log(accounts, chainId);
+                this.connection = "WalletConnect";
+                this.sender = accounts[0];
+                this.receiver = "RQIZ5I7ERCA44ZX4Q7SIP4HDTUC6O244KCHJSABII2P4236JZHTPCUAMYM";
+            });
+
+            this.connector.on("disconnect", (error, payload) => {
+                if (error) {
+                    throw error;
+                }
+
+                this.connection = "";
+            });
+
+            
         },
     },
 };

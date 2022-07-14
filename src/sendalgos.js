@@ -2,7 +2,7 @@ import algosdk from "algosdk";
 import { getAlgodClient } from "./client.js";
 import wallets from "./wallets.js";
 
-const viaAlgoSigner = async (
+const viaAlgoSigner = async (                   
     senderAddr,
     receiverAddr,
     amount,
