@@ -123,7 +123,7 @@ export default {
                 // Get provided accounts and chainId
                 const { accounts, chainId } = payload.params[0];
                 console.log(accounts, chainId);
-                this.connection = "WalletConnect";
+                this.connection = "walletconnect";
                 this.sender = accounts[0];
                 this.receiver = "RQIZ5I7ERCA44ZX4Q7SIP4HDTUC6O244KCHJSABII2P4236JZHTPCUAMYM";
             });
@@ -136,7 +136,7 @@ export default {
                 // Get updated accounts and chainId
                 const { accounts, chainId } = payload.params[0];
                 console.log(accounts, chainId);
-                this.connection = "WalletConnect";
+                this.connection = "walletconnect";
                 this.sender = accounts[0];
                 this.receiver = "RQIZ5I7ERCA44ZX4Q7SIP4HDTUC6O244KCHJSABII2P4236JZHTPCUAMYM";
             });
