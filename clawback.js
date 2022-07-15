@@ -71,12 +71,46 @@ const AssetCreation = async (creator, clawback) => {
   // Get the new asset's information from the creator account
   assetID = cofTXN["asset-index"];
   console.log("🚀 ~ file: clawback.js ~ line 94 ~ assetID ", assetID)
-  console.log("💥 Asset created successfully",)
+
+  console.log(`💥 NFT created. Asset ID is ${assetID}`);
+  return assetID;
+
+}
+
+const TransferOrRecieveAsset = async (args) => {
+
+
+  const defaultParams = { sender: null, receiver: null, assetID: undefined, amount: 0 }
+  const objParams = { ...defaultParams, ...args }
+  recipient = objParams.receiver.addr;
+  revocationTarget = undefined;
+  closeRemainderTo = undefined;
+  note = undefined;
+
+  let sender = objParams.sender ? objParams.sender.addr : recipient;
+  console.log("🚀 ~ file: clawback.js ~ line 82 ~ TransferOrRecieveAsset ~ reciever_account", reciever_account)
+
+  params = await algodClient.getTransactionParams().do();
+
+  let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(
+    sender,
+    recipient,
+    closeRemainderTo,
+    revocationTarget,
+    objParams.amount,
+    note,
+    objParams.assetID,
+    params);
+
+  rawSignedTxn = xtxn.signTxn(sender.sk)
+  await submitToNetwork(rawSignedTxn);
+  await printAssetHolding(algodClient, sender, objParams.assetID);
+
 
 }
 
 const provideAlgos = async (sender, receiver, amount) => {
-    
+
   const suggestedParams = await algodClient.getTransactionParams().do();
 
   let txn = algosdk.makePaymentTxnWithSuggestedParams(
@@ -90,30 +124,35 @@ const provideAlgos = async (sender, receiver, amount) => {
 
   // sign the transaction
   const signedTxn = txn.signTxn(sender.sk);
+  await submitToNetwork(signedTxn);
 
-  let tx = await algodClient.sendRawTransaction(signedTxn).do();
-
-  let confirmedTxn = await algosdk.waitForConfirmation(algodClient, tx.txId, 4);
-  //Get the completed Transaction
-  console.log("Transaction " + tx.txId + " confirmed in round " + confirmedTxn["confirmed-round"]);
-  
-  console.log("🤡",sender.addr, "sent", amount, "algos to", receiver.addr ,"successfully");
+  console.log("🤡", sender.addr, "sent", amount, "algos to", receiver.addr, "successfully");
 };
+
+
 
 (async () => {
 
 
-  let acc_B = await genStAcc.generateStandaloneAccount()
-  let acc_A = await genStAcc.generateStandaloneAccount()
+  let acc_B = await genStAcc.generateStandaloneAccount(); // B is the reciever account
+  let acc_A = await genStAcc.generateStandaloneAccount(); //A is the clawback account
 
-  await provideAlgos(creator, acc_A, 1e6)
-  await provideAlgos(creator, acc_B, 1e6)
+  await provideAlgos(creator, acc_A, 1e6);// ? 1 Algo
+  await provideAlgos(creator, acc_B, 1e6); // ? 1 Algo
 
-  await AssetCreation(acc_A, acc_A);
+  console.log("✍️ Asset creation ");
+  const assetId = await AssetCreation(creator, creator);
+  console.log("⬅️ opt-in to recieve asset ", assetId);
+  await TransferOrRecieveAsset({ receiver: acc_B, assetID: assetId });
+  console.log("➡️ send asset ", assetId);
+  await TransferOrRecieveAsset({ sender: creator, receiver: acc_B, assetID: assetId, amount: 1 });
+  // console.log("🤡 ⬅️ opt-in to recieve asset clawback ", assetId);
+  // await TransferOrRecieveAsset({ receiver: acc_A, assetID: assetId });
+  console.log("😮‍💨 finally ughh !! ");
 
 
 
-  console.log("Account A balance: ", (await algodClient.accountInformation(acc_A.addr).do()).assets);
-  console.log("Account B balance: ", (await algodClient.accountInformation(acc_B.addr).do()).assets);
+  console.log("➡️ Account A assets CLAWBACK  ", (await algodClient.accountInformation(acc_A.addr).do()).assets);
+  console.log("⬅️ Account B ASSETS: RECIEVER ", (await algodClient.accountInformation(acc_B.addr).do()).assets);
 
 })().catch(console.error)
