@@ -1,4 +1,6 @@
 const algosdk = require("algosdk");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const algodClient = new algosdk.Algodv2(
   process.env.ALGOD_TOKEN,
@@ -28,5 +30,9 @@ const submitToNetwork = async (signedTxn) => {
 };
 
 (async () => {
-  // Write your code here
+  
+
+
+
+  
 })();
