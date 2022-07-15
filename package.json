@@ -1,12 +1,12 @@
 {
-  "name": "rekey-assignment",
+  "name": "clawback",
   "version": "1.0.0",
-  "description": "",
+  "description": "the fourth lesson",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Abdelhadi",
   "license": "ISC",
   "dependencies": {
     "algosdk": "^1.14.0",
