@@ -10,7 +10,7 @@ const algodClient = new algosdk.Algodv2(
 );
 
 const creator = algosdk.mnemonicToSecretKey(process.env.MNEMONIC_CREATOR);
-console.log("🚀 ~ file: clawback.js ~ line 12 ~ creator", creator.addr)
+// console.log("🚀 ~ file: clawback.js ~ line 12 ~ creator", creator.addr)
 
 const submitToNetwork = async (signedTxn) => {
     // send txn
@@ -36,7 +36,7 @@ const TransferOrRecieveAsset = async (args, clawback = null) => {
 
     const defaultParams = { sender: null, receiver: null, assetID: undefined, amount: 0 }
     const objParams = { ...defaultParams, ...args }
-    console.log("🚀 ~ file: clawback.js ~ line 85 ~ TransferOrRecieveAsset ~ objParams", objParams)
+    // console.log("🚀 ~ file: clawback.js ~ line 85 ~ TransferOrRecieveAsset ~ objParams", objParams)
 
     recipient = (clawback === null) ? objParams.receiver.addr : clawback.addr;
     revocationTarget = (clawback === null) ? undefined : objParams.receiver.addr;
@@ -45,7 +45,7 @@ const TransferOrRecieveAsset = async (args, clawback = null) => {
 
     //console.log(objParams.sender,objParams.sender===null);
     let sender = (objParams.sender === null) ? objParams.receiver : objParams.sender;
-    console.log("🚀 ~ file: clawback.js ~ line 91 ~ TransferOrRecieveAsset ~ sender", sender)
+    // console.log("🚀 ~ file: clawback.js ~ line 91 ~ TransferOrRecieveAsset ~ sender", sender)
 
 
     params = await algodClient.getTransactionParams().do();
@@ -59,12 +59,11 @@ const TransferOrRecieveAsset = async (args, clawback = null) => {
         note,
         objParams.assetID,
         params);
-    console.log("🚀 ~ file: clawback.js ~ line 107 ~ TransferOrRecieveAsset ~ xtxn", xtxn)
+    // console.log("🚀 ~ file: clawback.js ~ line 107 ~ TransferOrRecieveAsset ~ xtxn", xtxn)
 
-    rawSignedTxn = xtxn.signTxn(sender.sk)
-    await submitToNetwork(rawSignedTxn);
+    
     await printAssetHolding(algodClient, sender, objParams.assetID);
-
+    return xtxn;
 
 
 }
@@ -120,7 +119,7 @@ const AssetCreation = async (creator, clawback = null) => {
 
     // Get the new asset's information from the creator account
     assetID = cofTXN["asset-index"];
-    console.log("🚀 ~ file: clawback.js ~ line 94 ~ assetID ", assetID)
+    // console.log("🚀 ~ file: clawback.js ~ line 94 ~ assetID ", assetID)
 
     console.log(`💥 NFT created. Asset ID is ${assetID}`);
     return assetID;
@@ -174,18 +173,20 @@ const TransactionTxn = async (sender, receiver, amount) => {
     const assetID = await AssetCreation(creator); // ? we create an asset from file received by the artist
     const buyerToCreator = await TransactionTxn(buyer, creator, 1e6); // ! the buyer pays the creator
 
-    await TransferOrRecieveAsset({ receiver: buyer, assetID: assetID });
-    await TransferOrRecieveAsset({ sender: creator, receiver: buyer, assetID: assetID, amount: 1 });
+    const buyer_opt_in_tx=await TransferOrRecieveAsset({ receiver: buyer, assetID: assetID });
+    const creator_asset_to_buyer_tx =await TransferOrRecieveAsset({ sender: creator, receiver: buyer, assetID: assetID, amount: 1 });
 
     const creatorToArtist = await TransactionTxn(creator, artist, 1e6 * 0.1); // ! the creator pays the artist   
 
     // ! ATOMIC TRANSFERS BEGAN
-    let txns = [buyerToCreator, creatorToArtist];
+    let txns = [buyerToCreator, buyer_opt_in_tx,creator_asset_to_buyer_tx,creatorToArtist];
     let txgroup = algosdk.assignGroupID(txns);
     console.log("🚀 ~ file: atomic.js ~ line 185 ~ txgroup", txgroup)
 
     let signTxn = []
     signTxn.push(buyerToCreator.signTxn(buyer.sk));
+    signTxn.push(buyer_opt_in_tx.signTxn(buyer.sk));
+    signTxn.push(creator_asset_to_buyer_tx.signTxn(creator.sk));
     signTxn.push(creatorToArtist.signTxn(creator.sk));
 
     await submitToNetwork(signTxn);
