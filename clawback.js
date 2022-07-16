@@ -31,9 +31,9 @@ const submitToNetwork = async (signedTxn) => {
   return confirmedTxn;
 };
 
-const AssetCreation = async (creator, clawback) => {
+const AssetCreation = async (creator, clawback = null) => {
 
-  let clawback = clawback || creator;
+  let clawback_ = clawback || creator;
   let params = await algodClient.getTransactionParams().do();
 
   let addr = creator.addr;
@@ -59,7 +59,7 @@ const AssetCreation = async (creator, clawback) => {
     defaultFrozen,
     freeze: undefined,
     manager: undefined,
-    clawback: clawback.addr, // the creator account can perform the clawback
+    clawback: clawback_.addr, // the creator account can perform the clawback
     reserve: undefined,
     suggestedParams: params,
   });
@@ -77,23 +77,27 @@ const AssetCreation = async (creator, clawback) => {
 
 }
 
-const TransferOrRecieveAsset = async (args) => {
+const TransferOrRecieveAsset = async (args, clawback = null) => {
 
 
   const defaultParams = { sender: null, receiver: null, assetID: undefined, amount: 0 }
   const objParams = { ...defaultParams, ...args }
-  recipient = objParams.receiver.addr;
-  revocationTarget = undefined;
+  console.log("🚀 ~ file: clawback.js ~ line 85 ~ TransferOrRecieveAsset ~ objParams", objParams)
+
+  recipient = (clawback === null) ? objParams.receiver.addr : clawback.addr;
+  revocationTarget = (clawback === null) ? undefined : objParams.receiver.addr;
   closeRemainderTo = undefined;
   note = undefined;
 
-  let sender = objParams.sender ? objParams.sender.addr : recipient;
-  console.log("🚀 ~ file: clawback.js ~ line 82 ~ TransferOrRecieveAsset ~ reciever_account", reciever_account)
+  //console.log(objParams.sender,objParams.sender===null);
+  let sender = (objParams.sender === null) ? objParams.receiver : objParams.sender;
+  console.log("🚀 ~ file: clawback.js ~ line 91 ~ TransferOrRecieveAsset ~ sender", sender)
+
 
   params = await algodClient.getTransactionParams().do();
 
   let xtxn = algosdk.makeAssetTransferTxnWithSuggestedParams(
-    sender,
+    sender.addr,
     recipient,
     closeRemainderTo,
     revocationTarget,
@@ -101,12 +105,26 @@ const TransferOrRecieveAsset = async (args) => {
     note,
     objParams.assetID,
     params);
+  console.log("🚀 ~ file: clawback.js ~ line 107 ~ TransferOrRecieveAsset ~ xtxn", xtxn)
 
   rawSignedTxn = xtxn.signTxn(sender.sk)
   await submitToNetwork(rawSignedTxn);
   await printAssetHolding(algodClient, sender, objParams.assetID);
 
 
+
+}
+
+const printAssetHolding = async function (algodclient, account, assetid) {
+  let accountInfo = await algodclient.accountInformation(account.addr).do();
+  for (idx = 0; idx < accountInfo['assets'].length; idx++) {
+    let scrutinizedAsset = accountInfo['assets'][idx];
+    if (scrutinizedAsset['asset-id'] == assetid) {
+      let myassetholding = JSON.stringify(scrutinizedAsset, undefined, 2);
+      console.log("assetholdinginfo = " + myassetholding);
+      break;
+    }
+  }
 }
 
 const provideAlgos = async (sender, receiver, amount) => {
@@ -141,18 +159,21 @@ const provideAlgos = async (sender, receiver, amount) => {
   await provideAlgos(creator, acc_B, 1e6); // ? 1 Algo
 
   console.log("✍️ Asset creation ");
-  const assetId = await AssetCreation(creator, creator);
+  const assetId = await AssetCreation(creator);
   console.log("⬅️ opt-in to recieve asset ", assetId);
   await TransferOrRecieveAsset({ receiver: acc_B, assetID: assetId });
   console.log("➡️ send asset ", assetId);
   await TransferOrRecieveAsset({ sender: creator, receiver: acc_B, assetID: assetId, amount: 1 });
-  // console.log("🤡 ⬅️ opt-in to recieve asset clawback ", assetId);
-  // await TransferOrRecieveAsset({ receiver: acc_A, assetID: assetId });
+  console.log("🤡 ⬅️ opt-in to recieve asset clawback ", assetId);
+  await TransferOrRecieveAsset({ receiver: acc_A, assetID: assetId });
+  console.log("➡️ send asset ", assetId);
+  await TransferOrRecieveAsset({ sender: creator, receiver: acc_B, assetID: assetId, amount: 1 }, acc_A);
+
   console.log("😮‍💨 finally ughh !! ");
 
 
 
-  console.log("➡️ Account A assets CLAWBACK  ", (await algodClient.accountInformation(acc_A.addr).do()).assets);
-  console.log("⬅️ Account B ASSETS: RECIEVER ", (await algodClient.accountInformation(acc_B.addr).do()).assets);
+  console.log("➡️ Account A assets CLAWBACK  ", (await algodClient.accountInformation(acc_A.addr).do()));
+  console.log("⬅️ Account B ASSETS: RECIEVER ", (await algodClient.accountInformation(acc_B.addr).do()));
 
 })().catch(console.error)
