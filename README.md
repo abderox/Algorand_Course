@@ -20,9 +20,9 @@ Write your solution in the skeleton code provided in `clawback.js`
 
 ### Setup instructions
 1. Install packages with `npm install`.
-2. Copy `.env.example` to `.env`.
+2. Copy `.env copy` to `.env`.
 3. Add account information (address and mnemonic) into the `.env` file.
-4. Use variables from `.env` file by running `source .env`.
+
 
 ### Get account mnemonic
 To get the mnemonic of an account in goal CLI, replace the `<account address>` run this command in your sandbox directory.
@@ -33,7 +33,30 @@ To get the mnemonic of an account in goal CLI, replace the `<account address>` r
 ### Running your script
 2. Run your script with `node clawback.js`.
 
-### Key points to remember
-1. The receiver accounts should have sufficient minimum balance.
-2. Accounts need to be opted into the asset before receiving it.
-3. You should set a clawback address to the asset.
+
+## Atomic transfers assignment
+- ## :computer: [assignment](https://github.com/Algo-Foundry/atomic-transfers)
+
+Create an asset (NFT or fungible token). After which, create an atomic transfer that consists of the following transactions,
+
+1. Buyer account pays 1 Algo to the creator.
+2. Buyer opts into the asset. 
+3. Creator sends the NFT to the buyer.
+4. Creator sends 10% of the payment to the artist's account.
+ 
+You can assume that the buyer and artist accounts are standalone accounts.
+
+### Setup instructions
+1. Install packages with `npm install`.
+2. Copy `.env copy` to `.env`.
+3. Add account information (address and mnemonic) into the `.env` file.
+
+### Get account mnemonic
+To get the mnemonic of an account in goal CLI, replace the `<account address>` run this command in your sandbox directory.
+```
+./sandbox goal account export -a <account address>
+```
+
+### Running your script
+Run your script with `node atomic.js`.
+
