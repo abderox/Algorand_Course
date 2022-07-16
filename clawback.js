@@ -58,7 +58,7 @@ const AssetCreation = async (creator, clawback = null) => {
     assetMetadataHash: undefined,
     defaultFrozen,
     freeze: undefined,
-    manager: undefined,
+    manager: creator.addr,
     clawback: clawback_.addr, // the creator account can perform the clawback
     reserve: undefined,
     suggestedParams: params,
@@ -147,8 +147,36 @@ const provideAlgos = async (sender, receiver, amount) => {
   console.log("🤡", sender.addr, "sent", amount, "algos to", receiver.addr, "successfully");
 };
 
+const DestroyAsset = async (assetID, creator) => {
+  let params = await algodClient.getTransactionParams().do();
+  let txn = algosdk.makeAssetDestroyTxnWithSuggestedParams(
+    creator.addr,
+    undefined,
+    assetID,
+    params
+  );
+  const signedTxn = txn.signTxn(creator.sk);
+  await submitToNetwork(signedTxn);
+  console.log("💥 Asset destroyed");
+}
+
+const keypress = async () => {
+  process.stdin.setRawMode(true)
+
+  return new Promise(resolve => process.stdin.once('data', async (key) => {
+    if (key === '\u0003') {
+      
+      resolve('Exiting RAW mode');
+      process.exit();
+    }
+    else {
+      process.stdin.setRawMode(false)
+      resolve('Exiting RAW mode');
+    }
 
 
+  }))
+}
 (async () => {
 
 
@@ -176,4 +204,18 @@ const provideAlgos = async (sender, receiver, amount) => {
   console.log("➡️ Account A assets CLAWBACK  ", (await algodClient.accountInformation(acc_A.addr).do()));
   console.log("⬅️ Account B ASSETS: RECIEVER ", (await algodClient.accountInformation(acc_B.addr).do()));
 
+  console.log('🚿 press anykey to delete the asset ?');
+  (await keypress().then((msg) => console.log("👌 ", msg)));
+  await DestroyAsset(126, creator);
+
+
+  console.log("➡️ Account A assets CLAWBACK  ", (await algodClient.accountInformation(acc_A.addr).do()));
+  console.log("⬅️ Account B ASSETS: RECIEVER ", (await algodClient.accountInformation(acc_B.addr).do()));
+
 })().catch(console.error)
+
+
+
+
+
+
