@@ -4,8 +4,7 @@
 ## Author
 
 - ## :eyeglasses: [abderox](https://github.com/abderox/)
-
-[![OSCS Status](https://www.oscs1024.com/platform/badge//abderox/Algorand_Course.git.svg?size=large)](https://www.murphysec.com/dr/R6pPcWf0WWhwAYBZqA)
+[![OSCS Status](https://www.oscs1024.com/platform/badge//abderox/Algorand_Course.git.svg?size=small)](https://www.murphysec.com/dr/R6pPcWf0WWhwAYBZqA)
 
 #### :shit: It is better to work on wsl environment , working with any distribution of linux if working on windows machines . Sometimes words can not describe how poor is windows !! 
 ## :bookmark_tabs: __Lesson 2__
