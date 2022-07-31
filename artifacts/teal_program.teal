@@ -1,0 +1,54 @@
+#pragma version 6
+// check password
+// creator receives 10% of the 1st txn amount
+// receiver for 2nd txn should be the creator's address
+
+b main
+
+// basic checks using subroutine - adds 1 or 0 to the stack
+basic_checks:
+txn RekeyTo
+global ZeroAddress
+==
+txn CloseRemainderTo
+global ZeroAddress
+==
+&&
+txn AssetCloseTo
+global ZeroAddress
+==
+&&
+retsub
+
+
+
+function_a:
+arg 1
+byte "algorandIsAwesome"
+==
+callsub basic_checks
+&&
+gtxn 1 Amount
+gtxn 0 Amount
+int 10 
+*
+int 100
+/
+==
+&&
+gtxn 1 Receiver
+addr KWJXTEDS6TAPH2KDJNVDD6WIR5RBXJ3MS352HB72X6U6YH4ZFFBVJE52JI
+==
+&&
+return 
+
+main:
+arg 0
+byte "transaction"
+==
+bnz function_a
+arg 0
+byte "function_b"
+==
+bnz function_a
+err
