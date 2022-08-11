@@ -1,3 +1,18 @@
+# :pushpin: Algorand Developer Course
+# :computer: Course from [algofoundry](https://courses.algofoundry.studio/)
+
+## Author
+
+- ## :eyeglasses: [abderox](https://github.com/abderox/)
+
+#### :shit: It is better to work on wsl environment , working with any distribution of linux if working on windows machines . Sometimes words can not describe how poor is windows !! 
+## :bookmark_tabs: __Lesson 7__
+#### In this assignment I learnt how to write in pyteal (python library)  
+
+
+
+
+
 # PyTeal assignment
 
 In this assignment, you will be tasked to complete the PyTeal stateless program in `artifacts/pyteal_program.py` that checks the transactions performed in `scripts/main.js`.
