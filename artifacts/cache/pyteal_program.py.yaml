@@ -1,0 +1,276 @@
+filename: pyteal_program.py
+timestamp: 1660184285
+compiled: BiYCIO8mrvQE/6iLFsXUozmi1AdGeAmrHK41tseXaMHElWV1IB/+tOAljmOzhL6OkK5Ds4tu0xvr6pOZenL5jkfDPLi/MRCBARIxBygSMQcpEhEQMQkyAxIxFTIDEhAxIDIDEhAQMQGB6AcOEDEHKBJAAD4xBykSQAABAC2ADHJjdjJwYXNzd29yZBIQMQcoEkAAEzEHKRJAAAEAMQiBgK3iBA5CAB4xCIHAlrECDkIAEy2ADHJjdjFwYXNzd29yZBJC/8cQQw==
+compiledHash: AS4B6AQ7ZB6MYJKWA4E2A6CHNA7FYM6NZBV25UC4VVCZAD6VFYWKKA6CB4
+srcHash: 571400519
+base64ToBytes:
+  - 6
+  - 38
+  - 2
+  - 32
+  - 239
+  - 38
+  - 174
+  - 244
+  - 4
+  - 255
+  - 168
+  - 139
+  - 22
+  - 197
+  - 212
+  - 163
+  - 57
+  - 162
+  - 212
+  - 7
+  - 70
+  - 120
+  - 9
+  - 171
+  - 28
+  - 174
+  - 53
+  - 182
+  - 199
+  - 151
+  - 104
+  - 193
+  - 196
+  - 149
+  - 101
+  - 117
+  - 32
+  - 31
+  - 254
+  - 180
+  - 224
+  - 37
+  - 142
+  - 99
+  - 179
+  - 132
+  - 190
+  - 142
+  - 144
+  - 174
+  - 67
+  - 179
+  - 139
+  - 110
+  - 211
+  - 27
+  - 235
+  - 234
+  - 147
+  - 153
+  - 122
+  - 114
+  - 249
+  - 142
+  - 71
+  - 195
+  - 60
+  - 184
+  - 191
+  - 49
+  - 16
+  - 129
+  - 1
+  - 18
+  - 49
+  - 7
+  - 40
+  - 18
+  - 49
+  - 7
+  - 41
+  - 18
+  - 17
+  - 16
+  - 49
+  - 9
+  - 50
+  - 3
+  - 18
+  - 49
+  - 21
+  - 50
+  - 3
+  - 18
+  - 16
+  - 49
+  - 32
+  - 50
+  - 3
+  - 18
+  - 16
+  - 16
+  - 49
+  - 1
+  - 129
+  - 232
+  - 7
+  - 14
+  - 16
+  - 49
+  - 7
+  - 40
+  - 18
+  - 64
+  - 0
+  - 62
+  - 49
+  - 7
+  - 41
+  - 18
+  - 64
+  - 0
+  - 1
+  - 0
+  - 45
+  - 128
+  - 12
+  - 114
+  - 99
+  - 118
+  - 50
+  - 112
+  - 97
+  - 115
+  - 115
+  - 119
+  - 111
+  - 114
+  - 100
+  - 18
+  - 16
+  - 49
+  - 7
+  - 40
+  - 18
+  - 64
+  - 0
+  - 19
+  - 49
+  - 7
+  - 41
+  - 18
+  - 64
+  - 0
+  - 1
+  - 0
+  - 49
+  - 8
+  - 129
+  - 128
+  - 173
+  - 226
+  - 4
+  - 14
+  - 66
+  - 0
+  - 30
+  - 49
+  - 8
+  - 129
+  - 192
+  - 150
+  - 177
+  - 2
+  - 14
+  - 66
+  - 0
+  - 19
+  - 45
+  - 128
+  - 12
+  - 114
+  - 99
+  - 118
+  - 49
+  - 112
+  - 97
+  - 115
+  - 115
+  - 119
+  - 111
+  - 114
+  - 100
+  - 18
+  - 66
+  - 255
+  - 199
+  - 16
+  - 67
+tealCode: |
+  #pragma version 6
+  txn TypeEnum
+  int pay
+  ==
+  txn Receiver
+  addr 54TK55AE76UIWFWF2SRTTIWUA5DHQCNLDSXDLNWHS5UMDREVMV2UHDZQKY
+  ==
+  txn Receiver
+  addr D77LJYBFRZR3HBF6R2IK4Q5TRNXNGG7L5KJZS6TS7GHEPQZ4XC7WXXE5PU
+  ==
+  ||
+  &&
+  txn CloseRemainderTo
+  global ZeroAddress
+  ==
+  txn AssetCloseTo
+  global ZeroAddress
+  ==
+  &&
+  txn RekeyTo
+  global ZeroAddress
+  ==
+  &&
+  &&
+  txn Fee
+  int 1000
+  <=
+  &&
+  txn Receiver
+  addr 54TK55AE76UIWFWF2SRTTIWUA5DHQCNLDSXDLNWHS5UMDREVMV2UHDZQKY
+  ==
+  bnz main_l9
+  txn Receiver
+  addr D77LJYBFRZR3HBF6R2IK4Q5TRNXNGG7L5KJZS6TS7GHEPQZ4XC7WXXE5PU
+  ==
+  bnz main_l3
+  err
+  main_l3:
+  arg 0
+  byte "rcv2password"
+  ==
+  main_l4:
+  &&
+  txn Receiver
+  addr 54TK55AE76UIWFWF2SRTTIWUA5DHQCNLDSXDLNWHS5UMDREVMV2UHDZQKY
+  ==
+  bnz main_l8
+  txn Receiver
+  addr D77LJYBFRZR3HBF6R2IK4Q5TRNXNGG7L5KJZS6TS7GHEPQZ4XC7WXXE5PU
+  ==
+  bnz main_l7
+  err
+  main_l7:
+  txn Amount
+  int 10000000
+  <=
+  b main_l10
+  main_l8:
+  txn Amount
+  int 5000000
+  <=
+  b main_l10
+  main_l9:
+  arg 0
+  byte "rcv1password"
+  ==
+  b main_l4
+  main_l10:
+  &&
+  return
