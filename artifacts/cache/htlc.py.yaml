@@ -1,0 +1,189 @@
+filename: htlc.py
+timestamp: 1662755363
+compiled: BjEQgQESMQkyAxIQMSAyAxIQMQGB6AcOEDEHgCAf/rTgJY5js4S+jpCuQ7OLbtMb6+qTmXpy+Y5Hwzy4vxItAYAg4LwK+i4AB9b+C/VppWFpiahv11+mUlgnCElb12N/y5YSEDEHgCDvJq70BP+oixbF1KM5otQHRngJqxyuNbbHl2jBxJVldRIxAoG7tAsNEBEQQw==
+compiledHash: IXHGSRVWJB2TJTVXDKZP3BZX6DSUA7YTQUTXDX7BBLU5WF5WWUT3B7LYNQ
+srcHash: 3745876229
+base64ToBytes:
+  - 6
+  - 49
+  - 16
+  - 129
+  - 1
+  - 18
+  - 49
+  - 9
+  - 50
+  - 3
+  - 18
+  - 16
+  - 49
+  - 32
+  - 50
+  - 3
+  - 18
+  - 16
+  - 49
+  - 1
+  - 129
+  - 232
+  - 7
+  - 14
+  - 16
+  - 49
+  - 7
+  - 128
+  - 32
+  - 31
+  - 254
+  - 180
+  - 224
+  - 37
+  - 142
+  - 99
+  - 179
+  - 132
+  - 190
+  - 142
+  - 144
+  - 174
+  - 67
+  - 179
+  - 139
+  - 110
+  - 211
+  - 27
+  - 235
+  - 234
+  - 147
+  - 153
+  - 122
+  - 114
+  - 249
+  - 142
+  - 71
+  - 195
+  - 60
+  - 184
+  - 191
+  - 18
+  - 45
+  - 1
+  - 128
+  - 32
+  - 224
+  - 188
+  - 10
+  - 250
+  - 46
+  - 0
+  - 7
+  - 214
+  - 254
+  - 11
+  - 245
+  - 105
+  - 165
+  - 97
+  - 105
+  - 137
+  - 168
+  - 111
+  - 215
+  - 95
+  - 166
+  - 82
+  - 88
+  - 39
+  - 8
+  - 73
+  - 91
+  - 215
+  - 99
+  - 127
+  - 203
+  - 150
+  - 18
+  - 16
+  - 49
+  - 7
+  - 128
+  - 32
+  - 239
+  - 38
+  - 174
+  - 244
+  - 4
+  - 255
+  - 168
+  - 139
+  - 22
+  - 197
+  - 212
+  - 163
+  - 57
+  - 162
+  - 212
+  - 7
+  - 70
+  - 120
+  - 9
+  - 171
+  - 28
+  - 174
+  - 53
+  - 182
+  - 199
+  - 151
+  - 104
+  - 193
+  - 196
+  - 149
+  - 101
+  - 117
+  - 18
+  - 49
+  - 2
+  - 129
+  - 187
+  - 180
+  - 11
+  - 13
+  - 16
+  - 17
+  - 16
+  - 67
+tealCode: |
+  #pragma version 6
+  txn TypeEnum
+  int pay
+  ==
+  txn CloseRemainderTo
+  global ZeroAddress
+  ==
+  &&
+  txn RekeyTo
+  global ZeroAddress
+  ==
+  &&
+  txn Fee
+  int 1000
+  <=
+  &&
+  txn Receiver
+  addr D77LJYBFRZR3HBF6R2IK4Q5TRNXNGG7L5KJZS6TS7GHEPQZ4XC7WXXE5PU
+  ==
+  arg 0
+  sha256
+  byte base64(4LwK+i4AB9b+C/VppWFpiahv11+mUlgnCElb12N/y5Y=)
+  ==
+  &&
+  txn Receiver
+  addr 54TK55AE76UIWFWF2SRTTIWUA5DHQCNLDSXDLNWHS5UMDREVMV2UHDZQKY
+  ==
+  txn FirstValid
+  int 186939
+  >
+  &&
+  ||
+  &&
+  return
