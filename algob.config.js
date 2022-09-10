@@ -17,6 +17,8 @@
 */
 
 // ## ACCOUNTS USING mnemonic ##
+const dotenv = require('dotenv')
+dotenv.config()
 const { mkAccounts, algodCredentialsFromEnv } = require("@algo-builder/algob");
 let accounts = mkAccounts([
   {

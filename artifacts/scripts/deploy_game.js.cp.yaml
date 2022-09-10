@@ -1,0 +1,15 @@
+default:
+    timestamp: 1662815650483
+    metadata: {}
+    asa: {}
+    ssc:
+        game_approval.py-game_clearstate.py:
+            1662815650:
+                creator: 54TK55AE76UIWFWF2SRTTIWUA5DHQCNLDSXDLNWHS5UMDREVMV2UHDZQKY
+                txId: 3IHS42QNFXLBI35EMHEAYBBISIYNEJ765BG52TOEI7GSVKPXEW2Q
+                confirmedRound: 193117
+                appID: 227
+                applicationAccount: 2VZVHCT7MI7H7Q47KP3JJW5CUOI5TZN6P4CXKDBYFA6BHAP4WYIFHJI6R4
+                timestamp: 1662815650
+                deleted: false
+    dLsig: {}
